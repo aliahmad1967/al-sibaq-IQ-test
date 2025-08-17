@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار الذكاء المتقدم - Advanced IQ Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 800px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .brain {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        .instructions {
+            text-align: right;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border-right: 4px solid #3b82f6;
+        }
+        .instructions h3 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+        }
+        .instructions ol {
+            padding-right: 20px;
+        }
+        .instructions li {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="brain">🧠</div>
+        <h1>اختبار الذكاء المتقدم</h1>
+        <p style="font-size: 1.3em; margin-bottom: 30px;">
+            اختبر قدراتك العقلية مع مجموعة متنوعة من الأسئلة المصممة لقياس ذكائك
+        </p>
+
+        <div class="instructions">
+            <h3>📋 طرق تشغيل التطبيق:</h3>
+            <ol>
+                <li><strong>الطريقة الأولى (مستحسنة):</strong> تشغيل ملف <code>run-iq-test.bat</code> أو <code>run-iq-test.ps1</code></li>
+                <li><strong>الطريقة الثانية:</strong> فتح مجلد <code>dist</code> وتشغيل ملف <code>index.html</code></li>
+                <li><strong>الطريقة الثالثة:</strong> استخدام الأوامر التالية في Terminal:</li>
+            </ol>
+            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; margin: 15px 0; font-family: monospace;">
+                npm install<br>
+                npm run build<br>
+                npm run preview
+            </div>
+        </div>
+
+        <div id="status" class="warning">
+            <strong>⚠️ تحذير:</strong> يتطلب تشغيل التطبيق وجود Node.js على النظام
+        </div>
+
+        <div style="margin: 30px 0;">
+            <button class="button" onclick="quickInstall()">🚀 تثبيت سريع</button>
+            <button class="button" onclick="openDistFolder()">🌐 تشغيل مباشر</button>
+            <button class="button" onclick="runInstaller()">🔧 مثبت متقدم</button>
+            <button class="button" onclick="openInstructions()">📖 التعليمات</button>
+        </div>
+
+        <div class="instructions">
+            <h3>🎯 مميزات التطبيق:</h3>
+            <ul style="text-align: right; list-style: none; padding: 0;">
+                <li>✅ 15 سؤال متنوع في مجالات مختلفة</li>
+                <li>✅ نظام توقيت ذكي مع مكافآت السرعة</li>
+                <li>✅ تحليل مفصل للأداء والنتائج</li>
+                <li>✅ تصنيف مستوى الذكاء</li>
+                <li>✅ واجهة عربية حديثة ومتجاوبة</li>
+                <li>✅ إمكانية المشاركة على وسائل التواصل</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function quickInstall() {
+            const instructions = `
+🚀 التثبيت السريع - Quick Install:
+
+1. شغل ملف: "🧠 تثبيت اختبار الذكاء.bat"
+   Run file: "🧠 تثبيت اختبار الذكاء.bat"
+
+2. اختر "تثبيت سريع"
+   Choose "Quick Install"
+
+3. سيتم إنشاء اختصار على سطح المكتب
+   A desktop shortcut will be created
+
+✅ لا يحتاج Node.js - No Node.js required
+✅ يعمل في أي متصفح - Works in any browser
+✅ تثبيت بنقرة واحدة - One-click installation
+            `;
+            alert(instructions);
+        }
+
+        function openDistFolder() {
+            // Try to open the dist/index.html file
+            const distPath = './dist/index.html';
+            window.open(distPath, '_blank');
+
+            document.getElementById('status').innerHTML =
+                '<strong>✅ تم:</strong> محاولة فتح التطبيق. إذا لم يعمل، استخدم الطرق الأخرى.';
+            document.getElementById('status').className = 'success';
+        }
+
+        function runInstaller() {
+            const instructions = `
+🔧 المثبت المتقدم - Advanced Installer:
+
+للويندوز - For Windows:
+1. شغل: "🧠 Install IQ Test.ps1" (واجهة رسومية)
+   Run: "🧠 Install IQ Test.ps1" (GUI interface)
+
+2. أو شغل: "installer.bat" (سطر الأوامر)
+   Or run: "installer.bat" (Command line)
+
+المتطلبات - Requirements:
+• Node.js (من https://nodejs.org)
+• Node.js (from https://nodejs.org)
+
+المميزات - Features:
+✅ تثبيت كامل مع جميع الميزات
+✅ Full installation with all features
+✅ إمكانيات التطوير والتخصيص
+✅ Development and customization capabilities
+            `;
+            alert(instructions);
+        }
+
+        function openInstructions() {
+            const instructions = `
+تعليمات تشغيل اختبار الذكاء المتقدم:
+
+1. تأكد من تثبيت Node.js على النظام
+2. افتح Terminal أو Command Prompt في مجلد التطبيق
+3. اكتب الأوامر التالية:
+   - npm install
+   - npm run build
+   - npm run preview
+4. افتح المتصفح على http://localhost:4173
+
+أو ببساطة:
+- شغل ملف run-iq-test.bat (Windows)
+- شغل ملف run-iq-test.ps1 (PowerShell)
+            `;
+            alert(instructions);
+        }
+
+        // Check if we can access the dist folder
+        fetch('./dist/index.html')
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('status').innerHTML = 
+                        '<strong>✅ جاهز:</strong> التطبيق مبني ومتاح للتشغيل';
+                    document.getElementById('status').className = 'success';
+                }
+            })
+            .catch(() => {
+                document.getElementById('status').innerHTML = 
+                    '<strong>⚠️ تحذير:</strong> يجب بناء التطبيق أولاً. استخدم npm run build';
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "السباق المعرفي",
+  "short_name": "السباق",
+  "description": "لعبة تعليمية بالعربية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-96-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ]
+}

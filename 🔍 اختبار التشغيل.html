@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار التشغيل - Test Runner</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #60a5fa;
+        }
+        .test-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #22c55e;
+        }
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .file-list {
+            text-align: right;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+        .file-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-status {
+            font-weight: bold;
+        }
+        .working { color: #22c55e; }
+        .broken { color: #ef4444; }
+        .unknown { color: #f59e0b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔍 اختبار التشغيل المباشر</h1>
+        <p>هذه الصفحة لاختبار ملفات التطبيق والتأكد من عملها</p>
+
+        <div id="status" class="status info">
+            🔄 جاري فحص الملفات...
+        </div>
+
+        <div class="file-list">
+            <h3>📁 الملفات المتاحة:</h3>
+            <div id="fileList"></div>
+        </div>
+
+        <div style="margin: 30px 0;">
+            <button class="test-button" onclick="testStandalone()">🧠 اختبار standalone.html</button>
+            <button class="test-button" onclick="testDist()">⚛️ اختبار dist/index.html</button>
+            <button class="test-button" onclick="runDiagnostics()">🔧 تشخيص شامل</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // فحص الملفات عند تحميل الصفحة
+        window.onload = function() {
+            checkFiles();
+        };
+
+        function checkFiles() {
+            const files = [
+                { name: 'standalone.html', path: './standalone.html', type: 'standalone' },
+                { name: 'dist/index.html', path: './dist/index.html', type: 'react' },
+                { name: 'dist/assets/index-vewMCGoS.js', path: './dist/assets/index-vewMCGoS.js', type: 'script' },
+                { name: 'dist/assets/index-Bh-UXP7V.css', path: './dist/assets/index-Bh-UXP7V.css', type: 'style' }
+            ];
+
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+
+            files.forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                
+                fetch(file.path)
+                    .then(response => {
+                        if (response.ok) {
+                            item.innerHTML = `
+                                <span>${file.name}</span>
+                                <span class="file-status working">✅ موجود</span>
+                            `;
+                        } else {
+                            item.innerHTML = `
+                                <span>${file.name}</span>
+                                <span class="file-status broken">❌ مفقود</span>
+                            `;
+                        }
+                    })
+                    .catch(() => {
+                        item.innerHTML = `
+                            <span>${file.name}</span>
+                            <span class="file-status unknown">⚠️ غير متاح</span>
+                        `;
+                    });
+
+                fileList.appendChild(item);
+            });
+
+            document.getElementById('status').innerHTML = '✅ تم فحص الملفات';
+            document.getElementById('status').className = 'status success';
+        }
+
+        function testStandalone() {
+            showResult('🧠 اختبار standalone.html', 'جاري فتح الملف المستقل...', 'info');
+            
+            // محاولة فتح الملف
+            try {
+                window.open('./standalone.html', '_blank');
+                setTimeout(() => {
+                    showResult('🧠 standalone.html', 'تم فتح الملف. إذا لم يعمل، تحقق من المتصفح.', 'success');
+                }, 1000);
+            } catch (error) {
+                showResult('🧠 standalone.html', 'خطأ: ' + error.message, 'error');
+            }
+        }
+
+        function testDist() {
+            showResult('⚛️ اختبار dist/index.html', 'جاري فتح تطبيق React...', 'info');
+            
+            try {
+                window.open('./dist/index.html', '_blank');
+                setTimeout(() => {
+                    showResult('⚛️ dist/index.html', 'تم فتح التطبيق. إذا ظهرت صفحة فارغة، تحقق من ملفات JavaScript.', 'success');
+                }, 1000);
+            } catch (error) {
+                showResult('⚛️ dist/index.html', 'خطأ: ' + error.message, 'error');
+            }
+        }
+
+        function runDiagnostics() {
+            showResult('🔧 التشخيص الشامل', 'جاري تشغيل الفحص الشامل...', 'info');
+            
+            const diagnostics = [];
+            
+            // فحص المتصفح
+            diagnostics.push(`🌐 المتصفح: ${navigator.userAgent.split(' ').pop()}`);
+            
+            // فحص JavaScript
+            diagnostics.push(`⚙️ JavaScript: ${typeof window !== 'undefined' ? 'مفعل' : 'معطل'}`);
+            
+            // فحص الموقع
+            diagnostics.push(`📍 الموقع: ${window.location.href}`);
+            
+            // فحص البروتوكول
+            diagnostics.push(`🔗 البروتوكول: ${window.location.protocol}`);
+            
+            // فحص الخطوط
+            if (document.fonts) {
+                diagnostics.push(`🔤 دعم الخطوط: متاح`);
+            } else {
+                diagnostics.push(`🔤 دعم الخطوط: غير متاح`);
+            }
+
+            const result = `
+                <div style="text-align: right; margin: 20px 0;">
+                    <h4>📋 نتائج التشخيص:</h4>
+                    ${diagnostics.map(d => `<div style="margin: 5px 0;">• ${d}</div>`).join('')}
+                    
+                    <h4 style="margin-top: 20px;">💡 نصائح الإصلاح:</h4>
+                    <div style="margin: 5px 0;">• تأكد من فتح الملفات من نفس المجلد</div>
+                    <div style="margin: 5px 0;">• جرب متصفح آخر (Chrome مستحسن)</div>
+                    <div style="margin: 5px 0;">• تأكد من تفعيل JavaScript</div>
+                    <div style="margin: 5px 0;">• إذا كانت الصفحة فارغة، انتظر قليلاً أو اضغط F5</div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                showResult('🔧 التشخيص الشامل', result, 'success');
+            }, 2000);
+        }
+
+        function showResult(title, message, type) {
+            const results = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `status ${type}`;
+            resultDiv.innerHTML = `<strong>${title}:</strong><br>${message}`;
+            results.appendChild(resultDiv);
+            
+            // التمرير للنتيجة
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
